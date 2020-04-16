@@ -1,6 +1,8 @@
 package main
 
 import (
+	"os"
+
 	"github.com/gdamore/tcell"
 )
 
@@ -8,10 +10,8 @@ func main() {
 	screen, _ := tcell.NewScreen()
 	screen.Init()
 	screen.Clear()
-	x := 1
-	y := 1
-	player := rune('@')
-	screen.SetContent(x, y, player, []rune{}, tcell.StyleDefault)
+	player := NewPlayer(screen)
+	// screen.SetContent(x, y, player, nil, tcell.StyleDefault)
 	screen.Show()
 
 	for {
@@ -19,18 +19,21 @@ func main() {
 		case *tcell.EventKey:
 			switch ev.Key() {
 			case tcell.KeyLeft:
-				x += -1
+				player.X += -1
 			case tcell.KeyRight:
-				x += 1
+				player.X += 1
 			case tcell.KeyUp:
-				y += -1
+				player.Y += -1
 			case tcell.KeyDown:
-				y += 1
+				player.Y += 1
+			case tcell.KeyESC:
+				screen.Fini()
+				os.Exit(0)
 			}
 		}
 
 		screen.Clear()
-		screen.SetContent(x, y, player, []rune{}, tcell.StyleDefault)
+		player.Update()
 		screen.Show()
 	}
 }
