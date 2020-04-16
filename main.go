@@ -11,7 +11,6 @@ func main() {
 	screen.Init()
 	screen.Clear()
 	player := NewPlayer(screen)
-	// screen.SetContent(x, y, player, nil, tcell.StyleDefault)
 	screen.Show()
 
 	for {
