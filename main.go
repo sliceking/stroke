@@ -10,7 +10,8 @@ func main() {
 	screen, _ := tcell.NewScreen()
 	screen.Init()
 	screen.Clear()
-	player := NewPlayer(screen)
+	gameMap := NewMap(&screen)
+	player := NewPlayer(&screen)
 	screen.Show()
 
 	for {
@@ -33,6 +34,7 @@ func main() {
 
 		screen.Clear()
 		player.Update()
+		gameMap.DrawMap()
 		screen.Show()
 	}
 }
