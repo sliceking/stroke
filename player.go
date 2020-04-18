@@ -6,19 +6,18 @@ type Player struct {
 	X         int
 	Y         int
 	Character rune
-	Screen    *tcell.Screen
+	Screen    tcell.Screen
 }
 
-func NewPlayer(screen *tcell.Screen) *Player {
+func NewPlayer(screen tcell.Screen) *Player {
 	return &Player{
-		X:         0,
-		Y:         0,
+		X:         4,
+		Y:         4,
 		Character: '@',
 		Screen:    screen,
 	}
 }
 
 func (p *Player) Update() {
-	screen := *p.Screen
-	screen.SetContent(p.X, p.Y, p.Character, nil, tcell.StyleDefault)
+	p.Screen.SetContent(p.X, p.Y, p.Character, nil, tcell.StyleDefault)
 }

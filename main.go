@@ -7,11 +7,16 @@ import (
 )
 
 func main() {
-	screen, _ := tcell.NewScreen()
+	screen, err := tcell.NewScreen()
+	if err != nil {
+		panic(err)
+	}
+
 	screen.Init()
 	screen.Clear()
-	gameMap := NewMap(&screen)
-	player := NewPlayer(&screen)
+	gameMap := NewMap(screen)
+	player := NewPlayer(screen)
+	enemy := NewEnemy(screen)
 	screen.Show()
 
 	for {
@@ -19,12 +24,24 @@ func main() {
 		case *tcell.EventKey:
 			switch ev.Key() {
 			case tcell.KeyLeft:
+				if r, _, _, _ := screen.GetContent(player.X-1, player.Y); r != ' ' {
+					continue
+				}
 				player.X += -1
 			case tcell.KeyRight:
+				if r, _, _, _ := screen.GetContent(player.X+1, player.Y); r != ' ' {
+					continue
+				}
 				player.X += 1
 			case tcell.KeyUp:
+				if r, _, _, _ := screen.GetContent(player.X, player.Y-1); r != ' ' {
+					continue
+				}
 				player.Y += -1
 			case tcell.KeyDown:
+				if r, _, _, _ := screen.GetContent(player.X, player.Y+1); r != ' ' {
+					continue
+				}
 				player.Y += 1
 			case tcell.KeyESC:
 				screen.Fini()
@@ -33,8 +50,9 @@ func main() {
 		}
 
 		screen.Clear()
-		player.Update()
 		gameMap.DrawMap()
+		player.Update()
+		enemy.Update()
 		screen.Show()
 	}
 }
