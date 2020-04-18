@@ -2,22 +2,16 @@ package main
 
 import "github.com/gdamore/tcell"
 
-type Player struct {
-	X         int
-	Y         int
-	Character rune
-	Screen    tcell.Screen
-}
+func NewPlayer(screen tcell.Screen) *Element {
+	player := Element{}
+	player.position = Vector{x: 5, y: 5}
+	player.active = true
 
-func NewPlayer(screen tcell.Screen) *Player {
-	return &Player{
-		X:         4,
-		Y:         4,
-		Character: '@',
-		Screen:    screen,
-	}
-}
+	renderer := newCharRenderer(&player, '@')
+	player.addComponent(renderer)
 
-func (p *Player) Update() {
-	p.Screen.SetContent(p.X, p.Y, p.Character, nil, tcell.StyleDefault)
+	mover := newKeyboardMover(&player)
+	player.addComponent(mover)
+
+	return &player
 }
